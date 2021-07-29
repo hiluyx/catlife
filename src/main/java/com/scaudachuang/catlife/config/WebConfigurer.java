@@ -21,12 +21,10 @@ public class WebConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration ir = registry.addInterceptor(loginHandlerInterceptor);
-        // 拦截路径
-        ir.addPathPatterns("/*");
-        // 不拦截路径
-        List<String> irs = new ArrayList<>();
-        irs.add("/api/*");
-        ir.excludePathPatterns(irs);
+        registry.addInterceptor(loginHandlerInterceptor)
+                .addPathPatterns("/**") // 拦截路径
+                .excludePathPatterns(
+                        "/**/wxLogin"
+                ); // 不拦截
     }
 }

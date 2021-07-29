@@ -13,5 +13,8 @@ server:
   port: 8657
 
 wx:
-  appid:
-  appsecret:
+  info:
+    url: https://api.weixin.qq.com/sns/jscode2session
+    appId:
+    secret:
+    grantType: authorization_code

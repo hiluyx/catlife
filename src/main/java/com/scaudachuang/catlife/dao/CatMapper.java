@@ -6,10 +6,11 @@ import com.scaudachuang.catlife.pojo.SimpleHaveCatInfoBar;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Mapper
+@Repository
 public interface CatMapper {
     Cat getCat(String cl);
     List<SimpleHaveCatInfoBar> getAllOwnerSimpleHaveCatById(int ownerId, RowBounds rowBounds);

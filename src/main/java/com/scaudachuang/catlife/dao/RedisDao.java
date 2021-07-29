@@ -2,6 +2,7 @@ package com.scaudachuang.catlife.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -13,25 +14,40 @@ import java.util.concurrent.TimeUnit;
  **/
 @Repository
 public class RedisDao {
+    /*
+    * login key : online_ownerid
+    *
+    * session : {
+    *   task_num :
+    *   task_history_num :
+    *
+    * }
+    *
+    * */
+
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     public void delete(String key) {
-        redisTemplate.delete(key);
+        stringRedisTemplate.delete(key);
+    }
+
+    public void expireOn1Hour(String key) {
+        expireOnHours(key, 1);
     }
 
     public void expireOnHours(String key, long time) {
-        redisTemplate.expire(key, time, TimeUnit.HOURS);
+        stringRedisTemplate.expire(key, time, TimeUnit.HOURS);
     }
 
     public long getExpire(String key) {
-        Long time = redisTemplate.getExpire(key);
+        Long time = stringRedisTemplate.getExpire(key);
         if (time == null) return -1;
         return time;
     }
 
     public boolean hasKey(String key){
-        Boolean b = redisTemplate.hasKey(key);
+        Boolean b = stringRedisTemplate.hasKey(key);
         if (b == null) return false;
         return b;
     }
