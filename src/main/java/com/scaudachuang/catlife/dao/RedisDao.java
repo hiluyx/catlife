@@ -24,6 +24,7 @@ public class RedisDao {
     * }
     *
     * */
+    public static final String ONLINE_PREFIX = "online_";
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;

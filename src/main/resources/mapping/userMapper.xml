@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.scaudachuang.catlife.dao.CatOwnerMapper">
+    <insert id="replaceInsertOwner">
+        replace into catowner (openId, sessionKey, nickname, avatar) values
+        (#{catOwner.openId}, #{catOwner.sessionKey}, #{catOwner.nickName}, #{catOwner.avatar});
+    </insert>
     <select id="getUserFollowedInfoBar"
-            resultType="com.scaudachuang.catlife.pojo.CorrelationInfoBar"
+            resultType="com.scaudachuang.catlife.model.CorrelationInfoBar"
             parameterType="int">
         select nId as id, fDatetime as fbDateTime, nickname, avatar
         from follow join catowner on follow.nId = catowner.ownerId
@@ -10,11 +14,14 @@
     </select>
 
     <select id="getUserBlackListedInfoBar"
-            resultType="com.scaudachuang.catlife.pojo.CorrelationInfoBar"
+            resultType="com.scaudachuang.catlife.model.CorrelationInfoBar"
             parameterType="int">
         select nId as id, bDatetime as fbDateTime, nickname, avatar
         from blacklist join catowner on blacklist.nId = catowner.ownerId
         where blacklist.beNId = #{id};
+    </select>
+    <select id="getByOpenId" resultType="com.scaudachuang.catlife.entity.CatOwner">
+        select * from catowner where openId = #{openId};
     </select>
 
 

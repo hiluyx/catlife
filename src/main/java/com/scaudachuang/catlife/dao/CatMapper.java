@@ -2,8 +2,7 @@ package com.scaudachuang.catlife.dao;
 
 import com.scaudachuang.catlife.entity.Cat;
 import com.scaudachuang.catlife.entity.HaveCat;
-import com.scaudachuang.catlife.pojo.SimpleHaveCatInfoBar;
-import org.apache.ibatis.annotations.Mapper;
+import com.scaudachuang.catlife.model.SimpleHaveCatInfoBar;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;

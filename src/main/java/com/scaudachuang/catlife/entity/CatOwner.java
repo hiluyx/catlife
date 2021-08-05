@@ -14,14 +14,11 @@ public class CatOwner {
     private String avatar;
 
     /*
-    * 一对多级联
-    *
-    * */
     List<HaveCat> haveCatList;
 
     List<Memorandum> memorandumList;
 
     List<Moments> momentsList;
 
-    List<Comments> commentsList;
+    List<Comments> commentsList;*/
 }

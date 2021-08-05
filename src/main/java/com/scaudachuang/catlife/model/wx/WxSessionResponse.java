@@ -1,4 +1,4 @@
-package com.scaudachuang.catlife.pojo.wx;
+package com.scaudachuang.catlife.model.wx;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

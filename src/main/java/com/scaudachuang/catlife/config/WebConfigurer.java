@@ -25,6 +25,6 @@ public class WebConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/**") // 拦截路径
                 .excludePathPatterns(
                         "/**/wxLogin"
-                ); // 不拦截
+                ); // 不拦截：登录，公共功能（TopHot、）
     }
 }

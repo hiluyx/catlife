@@ -1,4 +1,4 @@
-package com.scaudachuang.catlife.pojo;
+package com.scaudachuang.catlife.model;
 
 import lombok.Data;
 

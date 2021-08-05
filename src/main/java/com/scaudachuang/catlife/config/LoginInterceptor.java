@@ -24,17 +24,21 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得cookie
         Cookie[] cookies = request.getCookies();
-        // 没有cookie信息，则重定向到登录界面
-        if (null == cookies) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return false;
-        }
-        for (Cookie cookie : cookies) {
-            String name = cookie.getName();
-            if (!name.equals("define_online_status")) continue;
-            String value = cookie.getValue();
 
+        if (null != cookies) {
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                if (!name.equals("define_online_status")) continue;
+                String ownerId = cookie.getValue(); // ownerid
+                String onlineKey = RedisDao.ONLINE_PREFIX + ownerId;
+                if (redisDao.hasKey(onlineKey)) {
+                    redisDao.expireOn1Hour(onlineKey); // 续上一小时
+                    return true;
+                }
+            }
         }
+        // 没有cookie信息，则重定向到登录界面
+        response.sendRedirect(request.getContextPath() + "/wxLogin");
         return false;
     }
 }

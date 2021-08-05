@@ -10,7 +10,7 @@
     </select>
 
     <select id="getAllOwnerSimpleHaveCatById"
-            resultType="com.scaudachuang.catlife.pojo.SimpleHaveCatInfoBar"
+            resultType="com.scaudachuang.catlife.model.SimpleHaveCatInfoBar"
             parameterType="int">
         select catclass, havecatid, catname
         from havecat
@@ -19,7 +19,7 @@
     </select>
 
     <select id="getAllOwnerSimpleHaveCatByIdAndCatClass"
-            resultType="com.scaudachuang.catlife.pojo.SimpleHaveCatInfoBar">
+            resultType="com.scaudachuang.catlife.model.SimpleHaveCatInfoBar">
         select catclass, havecatid, catname
         from havecat
         where ownerid = #{ownerId} and catclass = #{catClass}

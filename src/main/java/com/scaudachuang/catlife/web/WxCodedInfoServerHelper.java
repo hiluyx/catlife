@@ -1,8 +1,8 @@
 package com.scaudachuang.catlife.web;
 
 import com.scaudachuang.catlife.config.WxAppDevInfo;
-import com.scaudachuang.catlife.pojo.wx.WxUserDecryptedInfo;
-import com.scaudachuang.catlife.pojo.wx.WxSessionResponse;
+import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
+import com.scaudachuang.catlife.model.wx.WxSessionResponse;
 import com.scaudachuang.catlife.utils.JSONUtil;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -43,7 +43,7 @@ public class WxCodedInfoServerHelper {
         return body;
     }
 
-    private static WxUserDecryptedInfo decryptUserInfo(
+    public static WxUserDecryptedInfo decryptUserInfo(
             String encryptedData, String sessionKey, String iv) throws Exception {
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
@@ -72,7 +72,7 @@ public class WxCodedInfoServerHelper {
             String result = new String(resultByte, StandardCharsets.UTF_8);
             return JSONUtil.readValue(result, WxUserDecryptedInfo.class);
         }
-        return null;
+        throw new NullPointerException("decryptUserInfo null");
     }
 
 }

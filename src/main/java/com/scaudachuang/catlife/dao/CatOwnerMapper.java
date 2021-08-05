@@ -1,6 +1,8 @@
 package com.scaudachuang.catlife.dao;
 
-import com.scaudachuang.catlife.pojo.CorrelationInfoBar;
+import com.scaudachuang.catlife.entity.CatOwner;
+import com.scaudachuang.catlife.model.CorrelationInfoBar;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +23,9 @@ public interface CatOwnerMapper {
             int id,
             RowBounds rowBounds
     );
+
+    CatOwner getByOpenId(@Param("openId") String openId);
+
+    int replaceInsertOwner(@Param("catOwner") CatOwner catOwner);
+
 }
