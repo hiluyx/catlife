@@ -1,7 +1,9 @@
 package com.scaudachuang.catlife.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,15 +18,21 @@ import java.util.List;
  **/
 @Configuration
 public class WebConfigurer implements WebMvcConfigurer {
-    @Resource
-    private LoginInterceptor loginHandlerInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginHandlerInterceptor)
+        registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**") // 拦截路径
                 .excludePathPatterns(
-                        "/**/wxLogin"
+                        "/error",
+                        "/wxLogin",
+                        "/addSession",
+                        "/getSession"
                 ); // 不拦截：登录，公共功能（TopHot、）
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

@@ -1,21 +1,25 @@
 package com.scaudachuang.catlife.web;
 
+import com.scaudachuang.catlife.dao.RedisDao;
 import com.scaudachuang.catlife.entity.CatOwner;
 import com.scaudachuang.catlife.model.RequestMessage;
 import com.scaudachuang.catlife.model.wx.LoginParams;
 import com.scaudachuang.catlife.model.wx.WxSessionResponse;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import com.scaudachuang.catlife.service.CatOwnerService;
+import com.scaudachuang.catlife.session.UserSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.ConnectException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author hiluyx
@@ -29,6 +33,9 @@ public class LoginController {
 
     @Resource
     private CatOwnerService catOwnerService;
+
+    @Resource
+    private RedisDao redisDao;
 
     @RequestMapping(path = "/wxLogin", method = RequestMethod.POST)
     public RequestMessage<CatOwner> wxLogin(@RequestParam(value = "login_params") LoginParams params,
@@ -56,5 +63,32 @@ public class LoginController {
         } catch (Exception e) {
             return RequestMessage.ERROR(500, "decrypt uer info fail", null);
         }
+    }
+
+    @RequestMapping("/addSession")
+    @ResponseBody
+    public Map<String, String> session(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String id = session.getId();
+        String value = UUID.randomUUID().toString();
+        UserSession userSession = new UserSession(1, 1, value);
+        session.setAttribute("sessionValue", userSession);
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("value", userSession.toString());
+        return map;
+    }
+
+    @RequestMapping("/getSession")
+    @ResponseBody
+    public Map<String, String> getSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String id = session.getId();
+        UserSession sessionValue = (UserSession)session.getAttribute("sessionValue");
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("value", sessionValue.toString());
+        boolean b = redisDao.hasKey(id);
+        return map;
     }
 }

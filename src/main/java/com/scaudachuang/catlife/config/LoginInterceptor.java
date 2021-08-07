@@ -1,7 +1,7 @@
 package com.scaudachuang.catlife.config;
 
 import com.scaudachuang.catlife.dao.RedisDao;
-import com.sun.org.apache.bcel.internal.Const;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -23,6 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得cookie
+        StringBuffer requestURL = request.getRequestURL();
         Cookie[] cookies = request.getCookies();
 
         if (null != cookies) {

@@ -19,5 +19,10 @@
       "name": "wx.info.grantType",
       "type": "java.lang.String",
       "description": "Description for wx.info.grantType."
+    },
+    {
+      "name": "spring.profiles.active",
+      "type": "java.lang.String",
+      "description": "Description for spring.profiles.active."
     }
   ] }

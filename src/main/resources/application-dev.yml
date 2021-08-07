@@ -8,6 +8,10 @@ spring:
     password: lu19991024
     username: lyx
     url: jdbc:mysql://119.29.185.91:12322/cat_life?charset=utf8&useSSL=false
+  main:
+    allow-bean-definition-overriding: true
+  session:
+    store-type: redis
 
 server:
   port: 8657

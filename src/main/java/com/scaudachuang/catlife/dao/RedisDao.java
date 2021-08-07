@@ -1,5 +1,6 @@
 package com.scaudachuang.catlife.dao;
 
+import com.scaudachuang.catlife.session.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,7 +18,7 @@ public class RedisDao {
     /*
     * login key : online_ownerid
     *
-    * session : {
+    * session value : {
     *   task_num :
     *   task_history_num :
     *
@@ -27,10 +28,14 @@ public class RedisDao {
     public static final String ONLINE_PREFIX = "online_";
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Object> sessionRedisTemplate;
 
-    public void delete(String key) {
-        stringRedisTemplate.delete(key);
+    public void delSession(String key) {
+        sessionRedisTemplate.delete(key);
+    }
+
+    public void setSession(String ownerId, UserSession value, long l) {
+        sessionRedisTemplate.opsForValue().set(ONLINE_PREFIX + ownerId, value, l, TimeUnit.HOURS);
     }
 
     public void expireOn1Hour(String key) {
@@ -38,17 +43,17 @@ public class RedisDao {
     }
 
     public void expireOnHours(String key, long time) {
-        stringRedisTemplate.expire(key, time, TimeUnit.HOURS);
+        sessionRedisTemplate.expire(key, time, TimeUnit.HOURS);
     }
 
     public long getExpire(String key) {
-        Long time = stringRedisTemplate.getExpire(key);
+        Long time = sessionRedisTemplate.getExpire(key);
         if (time == null) return -1;
         return time;
     }
 
     public boolean hasKey(String key){
-        Boolean b = stringRedisTemplate.hasKey(key);
+        Boolean b = sessionRedisTemplate.hasKey(key);
         if (b == null) return false;
         return b;
     }
