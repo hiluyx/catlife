@@ -22,13 +22,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/**") // 拦截路径
-                .excludePathPatterns(
-                        "/error",
-                        "/wxLogin",
-                        "/addSession",
-                        "/getSession"
-                ); // 不拦截：登录，公共功能（TopHot、）
+                .addPathPatterns("/**").excludePathPatterns("/login");
     }
 
     @Bean

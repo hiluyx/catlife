@@ -9,5 +9,5 @@ public class Blacklist {
 
     private int nId;
     private int beNId;
-    private Timestamp fDatetime;
+    private Timestamp bDatetime;
 }

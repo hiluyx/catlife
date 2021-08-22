@@ -15,14 +15,9 @@ import java.util.List;
 @Repository
 public interface CatOwnerMapper {
     /*分页，通过id查找自己的粉丝*/
-    List<CorrelationInfoBar> getUserFollowedInfoBar(
-            int id,
+    List<CorrelationInfoBar> getUserCorrelationInfoBar(
+            long id, boolean bf,
             RowBounds rowBounds);
-    /*黑名单同理*/
-    List<CorrelationInfoBar> getUserBlackListedInfoBar(
-            int id,
-            RowBounds rowBounds
-    );
 
     CatOwner getByOpenId(@Param("openId") String openId);
 

@@ -1,6 +1,8 @@
 package com.scaudachuang.catlife.config;
 
 import com.scaudachuang.catlife.dao.RedisDao;
+import com.scaudachuang.catlife.session.UserSession;
+import com.scaudachuang.catlife.web.HttpSessionHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -22,24 +24,16 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 获得cookie
-        StringBuffer requestURL = request.getRequestURL();
-        Cookie[] cookies = request.getCookies();
-
-        if (null != cookies) {
-            for (Cookie cookie : cookies) {
-                String name = cookie.getName();
-                if (!name.equals("define_online_status")) continue;
-                String ownerId = cookie.getValue(); // ownerid
-                String onlineKey = RedisDao.ONLINE_PREFIX + ownerId;
-                if (redisDao.hasKey(onlineKey)) {
-                    redisDao.expireOn1Hour(onlineKey); // 续上一小时
-                    return true;
-                }
-            }
+        // 获得session
+        UserSession sessionValue = HttpSessionHelper.getSessionValue(request);
+        if (sessionValue.getDefineOnlineStatus() == 0) { // 用户没有登录
+            response.setStatus(404);
+            return false;
         }
-        // 没有cookie信息，则重定向到登录界面
-        response.sendRedirect(request.getContextPath() + "/wxLogin");
-        return false;
+
+        /*
+         * 这里没必要再查mysql验证 DefineOnlineStatus 是否正确？
+         */
+        return true;
     }
 }

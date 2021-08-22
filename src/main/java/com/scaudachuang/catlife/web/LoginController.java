@@ -37,7 +37,7 @@ public class LoginController {
     @Resource
     private RedisDao redisDao;
 
-    @RequestMapping(path = "/wxLogin", method = RequestMethod.POST)
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
     public RequestMessage<CatOwner> wxLogin(@RequestParam(value = "login_params") LoginParams params,
                                             HttpServletRequest request, HttpServletResponse response) throws ConnectException {
         /* 登录参数 */
@@ -49,46 +49,26 @@ public class LoginController {
         if (wxSessionResponse.getErrCode() != 0) {
             return RequestMessage.ERROR(wxSessionResponse.getErrCode(), wxSessionResponse.getErrMsg(), null);
         }
+        /* ******************** */
+
         String openId = wxSessionResponse.getOpenId();
         String sessionKey = wxSessionResponse.getSessionKey();
         try {
             /* 解压用户信息 */
             WxUserDecryptedInfo wxUserDecryptedInfo = WxCodedInfoServerHelper.decryptUserInfo(encryptedData, sessionKey, iv);
-            /* 获取数据库用户数据 */
+            /* 获取或覆盖数据库用户数据 */
             CatOwner catOwner = catOwnerService.existThenGetOtherwiseInsert(openId, wxUserDecryptedInfo, sessionKey);
-            /* 登录cookie */
-            Cookie cookie = new Cookie("define_online_status", String.valueOf(catOwner.getOwnerId()));
-            response.addCookie(cookie);
+
+            if (catOwner == null)
+                return RequestMessage.ERROR(500, "login fail", null);
+
+            UserSession session = HttpSessionHelper.getSessionValue(request);
+            // 不知道这里还需不需要保存进session
+            session.setDefineOnlineStatus(catOwner.getOwnerId());
+
             return RequestMessage.OK(catOwner);
         } catch (Exception e) {
             return RequestMessage.ERROR(500, "decrypt uer info fail", null);
         }
-    }
-
-    @RequestMapping("/addSession")
-    @ResponseBody
-    public Map<String, String> session(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String id = session.getId();
-        String value = UUID.randomUUID().toString();
-        UserSession userSession = new UserSession(1, 1, value);
-        session.setAttribute("sessionValue", userSession);
-        Map<String, String> map = new HashMap<>();
-        map.put("id", id);
-        map.put("value", userSession.toString());
-        return map;
-    }
-
-    @RequestMapping("/getSession")
-    @ResponseBody
-    public Map<String, String> getSession(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String id = session.getId();
-        UserSession sessionValue = (UserSession)session.getAttribute("sessionValue");
-        Map<String, String> map = new HashMap<>();
-        map.put("id", id);
-        map.put("value", sessionValue.toString());
-        boolean b = redisDao.hasKey(id);
-        return map;
     }
 }

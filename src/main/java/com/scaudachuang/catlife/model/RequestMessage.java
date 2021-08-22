@@ -11,6 +11,7 @@ public class RequestMessage<M> {
         msg.data = data;
         return msg;
     }
+
     public static <M> RequestMessage<M> ERROR(int status, String errMsg, M data) {
         RequestMessage<M> msg = new RequestMessage<>();
         msg.status = status;

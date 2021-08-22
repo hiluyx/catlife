@@ -2,10 +2,13 @@ package com.scaudachuang.catlife.service;
 
 import com.scaudachuang.catlife.dao.CatOwnerMapper;
 import com.scaudachuang.catlife.entity.CatOwner;
+import com.scaudachuang.catlife.model.CorrelationInfoBar;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class CatOwnerService {
@@ -27,7 +30,16 @@ public class CatOwnerService {
         catOwner.setAvatar(wxUserDecryptedInfo.getAvatarUrl());
         catOwner.setNickname(wxUserDecryptedInfo.getNickName());
         catOwner.setSessionKey(sessionKey);
-        catOwnerMapper.replaceInsertOwner(catOwner);
+        int i = catOwnerMapper.replaceInsertOwner(catOwner);
+        if (i <= 0)
+            return null;
         return catOwnerMapper.getByOpenId(openId);
+    }
+
+    public List<CorrelationInfoBar> getCorrelationList(int page, int limit, boolean bf, long ownerId) {
+        RowBounds rowBounds = new RowBounds(page, limit);
+        List<CorrelationInfoBar> userCorrelationInfoBar = catOwnerMapper.getUserCorrelationInfoBar(ownerId, bf, rowBounds);
+
+        return userCorrelationInfoBar;
     }
 }
