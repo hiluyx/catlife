@@ -4,6 +4,7 @@ public class RequestMessage<M> {
     private int status;
     private String errMsg;
     private M data;
+    private RequestMessage() {}
     public static <M> RequestMessage<M> OK(M data) {
         RequestMessage<M> msg = new RequestMessage<>();
         msg.status = 0;
@@ -17,6 +18,13 @@ public class RequestMessage<M> {
         msg.status = status;
         msg.errMsg = errMsg;
         msg.data = data;
+        return msg;
+    }
+
+    public static <M> RequestMessage<M> INSERT_BOOL(boolean insert, M m) {
+        RequestMessage<M> msg = new RequestMessage<>();
+        msg.status = insert ? 0 : 15600;
+        msg.data = m;
         return msg;
     }
 }

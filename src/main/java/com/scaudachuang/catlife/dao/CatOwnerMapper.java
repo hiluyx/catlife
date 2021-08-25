@@ -22,5 +22,4 @@ public interface CatOwnerMapper {
     CatOwner getByOpenId(@Param("openId") String openId);
 
     int replaceInsertOwner(@Param("catOwner") CatOwner catOwner);
-
 }

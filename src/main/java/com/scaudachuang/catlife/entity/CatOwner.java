@@ -2,8 +2,6 @@ package com.scaudachuang.catlife.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class CatOwner {
 
@@ -12,13 +10,4 @@ public class CatOwner {
     private String sessionKey;
     private String nickname;
     private String avatar;
-
-    /*
-    List<HaveCat> haveCatList;
-
-    List<Memorandum> memorandumList;
-
-    List<Moments> momentsList;
-
-    List<Comments> commentsList;*/
 }

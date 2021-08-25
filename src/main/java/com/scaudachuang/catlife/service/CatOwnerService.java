@@ -1,19 +1,25 @@
 package com.scaudachuang.catlife.service;
 
 import com.scaudachuang.catlife.dao.CatOwnerMapper;
+import com.scaudachuang.catlife.dao.CorrelationMapper;
 import com.scaudachuang.catlife.entity.CatOwner;
+import com.scaudachuang.catlife.entity.Correlation;
 import com.scaudachuang.catlife.model.CorrelationInfoBar;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class CatOwnerService {
     @Resource
     private CatOwnerMapper catOwnerMapper;
+    @Resource
+    private CorrelationMapper correlationMapper;
 
     /**
      * 存在则更新获取
@@ -41,5 +47,16 @@ public class CatOwnerService {
         List<CorrelationInfoBar> userCorrelationInfoBar = catOwnerMapper.getUserCorrelationInfoBar(ownerId, bf, rowBounds);
 
         return userCorrelationInfoBar;
+    }
+
+    public boolean newCorrelation(long nId, long beNid, boolean bf) {
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        Correlation correlation = new Correlation();
+        correlation.setBf(bf);
+        correlation.setBeNid(beNid);
+        correlation.setNId(nId);
+        correlation.setBfDatetime(timestamp);
+        int i = correlationMapper.insert(correlation);
+        return i > 0;
     }
 }

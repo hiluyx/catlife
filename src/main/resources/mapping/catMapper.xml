@@ -9,20 +9,14 @@
         where catclass = #{catClass};
     </select>
 
-    <select id="getAllOwnerSimpleHaveCatById"
-            resultType="com.scaudachuang.catlife.model.SimpleHaveCatInfoBar"
-            parameterType="int">
-        select catclass, havecatid, catname
-        from havecat
-        where ownerid = #{ownerId}
-        order by havecatid;
-    </select>
-
     <select id="getAllOwnerSimpleHaveCatByIdAndCatClass"
             resultType="com.scaudachuang.catlife.model.SimpleHaveCatInfoBar">
         select catclass, havecatid, catname
         from havecat
-        where ownerid = #{ownerId} and catclass = #{catClass}
+        where ownerid = #{ownerId}
+        <if test="catClass != null">
+            and catclass = #{catClass}
+        </if>
         order by havecatid;
     </select>
 
@@ -33,5 +27,12 @@
         where ownerid = #{ownerId}
           and catclass = #{catClass}
           and havecatid = #{haveCatId};
+    </select>
+
+    <select id="getNewNumberOfMyHaveCat" resultType="int">
+        select haveCatId
+        from havecat
+        where ownerId = #{ownerId} and catClass = #{catClass}
+        order by haveCatId DESC limit 1,1
     </select>
 </mapper>
