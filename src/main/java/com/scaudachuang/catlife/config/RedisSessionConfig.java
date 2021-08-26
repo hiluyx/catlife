@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.FlushMode;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
@@ -20,7 +21,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  **/
 @Configuration
 @EnableCaching
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1900)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1900, flushMode = FlushMode.IMMEDIATE)
 public class RedisSessionConfig extends CachingConfigurerSupport {
     /**
      * retemplate相关配置
@@ -39,11 +40,14 @@ public class RedisSessionConfig extends CachingConfigurerSupport {
         // 配置redisTemplate
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+
         RedisSerializer<?> stringSerializer = new StringRedisSerializer();
+
         redisTemplate.setKeySerializer(stringSerializer);// key序列化
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);// value序列化
         redisTemplate.setHashKeySerializer(stringSerializer);// Hash key序列化
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);// Hash value序列化
+
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

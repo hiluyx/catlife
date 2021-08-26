@@ -1,60 +1,67 @@
 package com.scaudachuang.catlife.dao;
 
+import com.scaudachuang.catlife.model.TopHotDetection;
 import com.scaudachuang.catlife.session.UserSession;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author hiluyx
  * @since 2021/6/26 17:26
  **/
 @Repository
-public class RedisDao {
-    /*
-    * login key : online_ownerid
-    *
-    * session value : {
-    *   task_num :
-    *   task_history_num :
-    *
-    * }
-    *
-    * */
-    public static final String ONLINE_PREFIX = "online_";
+public class RedisDao implements InitializingBean {
 
     @Resource
-    private RedisTemplate<String, Object> sessionRedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private CatMapper catMapper;
 
-    public void delSession(String key) {
-        sessionRedisTemplate.delete(key);
+    public Set<TopHotDetection> getAllTopHotZSet() {
+        Set<Object> range = redisTemplate.opsForZSet().range(TopHotDetection.redisZSetKey, 0, -1);
+        if (range == null) return null;
+        return range.stream()
+                .map(topHotDetection -> (TopHotDetection) topHotDetection)
+                .collect(Collectors.toSet());
     }
 
-    public void setSession(String ownerId, UserSession value, long l) {
-        sessionRedisTemplate.opsForValue().set(ONLINE_PREFIX + ownerId, value, l, TimeUnit.HOURS);
+    public List<TopHotDetection> getTopHotZSetN(int n) {
+        List<TopHotDetection> allTopHotZSet = new ArrayList<>(getAllTopHotZSet());
+        return allTopHotZSet.subList(allTopHotZSet.size() - n, allTopHotZSet.size());
     }
 
-    public void expireOn1Hour(String key) {
-        expireOnHours(key, 1);
+    public void addScore(TopHotDetection val, double score) {
+        redisTemplate.opsForZSet().add(TopHotDetection.redisZSetKey, val, score);
     }
 
-    public void expireOnHours(String key, long time) {
-        sessionRedisTemplate.expire(key, time, TimeUnit.HOURS);
+    public int rankTopHot(TopHotDetection val) {
+        Long rank = redisTemplate.opsForZSet().rank(TopHotDetection.redisZSetKey, val);
+        if (rank == null) return -1;
+        return rank.intValue();
     }
 
-    public long getExpire(String key) {
-        Long time = sessionRedisTemplate.getExpire(key);
-        if (time == null) return -1;
-        return time;
-    }
-
-    public boolean hasKey(String key){
-        Boolean b = sessionRedisTemplate.hasKey(key);
-        if (b == null) return false;
-        return b;
+    /**
+     * 把redis中没有的加进去
+     */
+    @Override
+    public void afterPropertiesSet() {
+        Set<String> cats = catMapper.catRepos();
+        Set<TopHotDetection> allTopHotZSet = getAllTopHotZSet();
+        cats.removeAll(allTopHotZSet.stream()
+                .map(TopHotDetection::getCatClass)
+                .collect(Collectors.toSet()));
+        cats.forEach(c -> addScore(new TopHotDetection(c), 0));
     }
 }

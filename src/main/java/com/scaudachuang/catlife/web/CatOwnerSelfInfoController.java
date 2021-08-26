@@ -43,12 +43,12 @@ public class CatOwnerSelfInfoController {
             @RequestParam("limit") int limit,
             @RequestParam("page") int page,
             HttpServletRequest request
-        ) {
+        ) throws Exception {
         /*
         * ownerId 不提供说明是自己，在缓存中获取
         * */
         if (ownerId == 0) {
-            ownerId = HttpSessionHelper.getSessionValue(request).getDefineOnlineStatus();
+            ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
         } else if (ownerId < 0) {
             return RequestMessage.ERROR(303, "error ownerId", null);
         }
@@ -67,8 +67,8 @@ public class CatOwnerSelfInfoController {
     @PostMapping(value = "/correlationList")
     public RequestMessage<Object> insertMyCorrelationList(@RequestParam("nId") long nId,
                                                           @RequestParam("bf") int bf,
-                                                          HttpServletRequest request) {
-        UserSession sessionValue = HttpSessionHelper.getSessionValue(request);
+                                                          HttpServletRequest request) throws Exception {
+        UserSession sessionValue = HttpSessionHelper.getUserSessionValue(request);
         long beNid = sessionValue.getDefineOnlineStatus();
         if (beNid <= 0)
             return RequestMessage.ERROR(404, "用户错误", null);
@@ -87,9 +87,9 @@ public class CatOwnerSelfInfoController {
             @RequestParam("limit") int limit,
             @RequestParam(value = "catClass", required = false) String catClass,
             HttpServletRequest request
-        ) {
+        ) throws Exception {
         if (ownerId == 0) {
-            ownerId = HttpSessionHelper.getSessionValue(request).getDefineOnlineStatus();
+            ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
         } else if (ownerId < 0) {
             return RequestMessage.ERROR(303, "error ownerId", null);
         }
@@ -109,8 +109,8 @@ public class CatOwnerSelfInfoController {
     @GetMapping("/myOneHaveCat")
     public RequestMessage<HaveCat> getMyHaveCat(@RequestParam("catClass") String catClass,
                                                 @RequestParam("haveCatId") int haveCatId,
-                                                HttpServletRequest request) {
-        long ownerId = HttpSessionHelper.getSessionValue(request).getDefineOnlineStatus();
+                                                HttpServletRequest request) throws Exception {
+        long ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
         if (ownerId <= 0) return RequestMessage.ERROR(500, "错误用户缓存", null);
 
         HaveCat haveCat = haveCatService.myOneHaveCat(ownerId, catClass, haveCatId);

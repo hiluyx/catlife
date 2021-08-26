@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
  * @author hiluyx
  * @since 2021/7/11 21:17
  **/
-public class LoginInterceptor implements HandlerInterceptor {
+public class SelfOnlineInterceptor implements HandlerInterceptor {
 
     @Resource
     private RedisDao redisDao;
@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获得session
-        UserSession sessionValue = HttpSessionHelper.getSessionValue(request);
+        UserSession sessionValue = HttpSessionHelper.getUserSessionValue(request);
         if (sessionValue.getDefineOnlineStatus() == 0) { // 用户没有登录
             response.setStatus(404);
             return false;

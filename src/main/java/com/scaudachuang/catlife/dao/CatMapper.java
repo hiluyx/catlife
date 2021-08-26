@@ -9,10 +9,13 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CatMapper extends BaseMapper<HaveCat> {
     Cat getCat(String cl);
+
+    Set<String> catRepos();
 
     List<SimpleHaveCatInfoBar> getAllOwnerSimpleHaveCatByIdAndCatClass(
             @Param("ownerId") long ownerId,

@@ -62,10 +62,7 @@ public class LoginController {
             if (catOwner == null)
                 return RequestMessage.ERROR(500, "login fail", null);
 
-            UserSession session = HttpSessionHelper.getSessionValue(request);
-            // 不知道这里还需不需要保存进session
-            session.setDefineOnlineStatus(catOwner.getOwnerId());
-
+            HttpSessionHelper.setUserSessionId(request, catOwner.getOwnerId());
             return RequestMessage.OK(catOwner);
         } catch (Exception e) {
             return RequestMessage.ERROR(500, "decrypt uer info fail", null);
