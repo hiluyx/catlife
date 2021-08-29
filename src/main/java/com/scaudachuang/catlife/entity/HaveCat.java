@@ -1,5 +1,7 @@
 package com.scaudachuang.catlife.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -7,9 +9,12 @@ import java.util.List;
 
 @Data
 public class HaveCat {
-    private int ownerId;
+    @TableField
+    private Integer ownerId;
+    @TableField
     private String catClass;
-    private int haveCatId;
+    @TableField
+    private Integer haveCatId;
     private Timestamp birthday;
     private String catName;
     private boolean isSterilization;

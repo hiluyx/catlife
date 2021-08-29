@@ -1,10 +1,16 @@
 package com.scaudachuang.catlife.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
 public class RequestMessage<M> {
     private int status;
     private String errMsg;
     private M data;
-    private RequestMessage() {}
+    public RequestMessage() {}
     public static <M> RequestMessage<M> OK(M data) {
         RequestMessage<M> msg = new RequestMessage<>();
         msg.status = 0;

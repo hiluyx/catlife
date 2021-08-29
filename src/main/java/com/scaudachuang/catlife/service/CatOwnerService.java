@@ -44,18 +44,32 @@ public class CatOwnerService {
 
     public List<CorrelationInfoBar> getCorrelationList(int page, int limit, boolean bf, long ownerId) {
         RowBounds rowBounds = new RowBounds(page, limit);
-        List<CorrelationInfoBar> userCorrelationInfoBar = catOwnerMapper.getUserCorrelationInfoBar(ownerId, bf, rowBounds);
+        List<CorrelationInfoBar> userCorrelationInfoBar = correlationMapper.getUserCorrelationInfoBar(ownerId, bf, rowBounds);
 
         return userCorrelationInfoBar;
     }
 
     public boolean newCorrelation(long nId, long beNid, boolean bf) {
+        /*
+        * 严谨来说，nId需要检测是否存在
+        * */
         Timestamp timestamp = new Timestamp(new Date().getTime());
+
         Correlation correlation = new Correlation();
         correlation.setBf(bf);
         correlation.setBeNid(beNid);
         correlation.setNId(nId);
         correlation.setBfDatetime(timestamp);
+
+        /* 已存在 */
+        Correlation dd = correlationMapper.checkIfPresent(nId, beNid);
+        if (dd != null) {
+            if (dd.isBf() != bf)
+                /* 更新关系 */
+                return correlationMapper.updateCorr(correlation) > 0;
+            else return true;
+        }
+
         int i = correlationMapper.insert(correlation);
         return i > 0;
     }

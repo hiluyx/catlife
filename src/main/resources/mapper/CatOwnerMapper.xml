@@ -5,12 +5,7 @@
         replace into catowner (openId, sessionKey, nickname, avatar) values
         (#{catOwner.openId}, #{catOwner.sessionKey}, #{catOwner.nickName}, #{catOwner.avatar});
     </insert>
-    <select id="getUserCorrelationInfoBar"
-            resultType="com.scaudachuang.catlife.model.CorrelationInfoBar">
-        select nId as id, bfDatetime as fbDateTime, nickname, avatar
-        from correlation join catowner on correlation.nId = catowner.ownerId
-        where correlation.beNId = #{id} and bf = #{bf};
-    </select>
+
 
     <select id="getByOpenId" resultType="com.scaudachuang.catlife.entity.CatOwner">
         select * from catowner where openId = #{openId};

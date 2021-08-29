@@ -1,17 +1,13 @@
 package com.scaudachuang.catlife.config;
 
 import com.scaudachuang.catlife.dao.RedisDao;
-import com.scaudachuang.catlife.session.UserSession;
+import com.scaudachuang.catlife.model.session.UserSession;
 import com.scaudachuang.catlife.web.HttpSessionHelper;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author hiluyx

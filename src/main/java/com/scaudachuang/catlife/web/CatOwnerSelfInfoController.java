@@ -6,7 +6,7 @@ import com.scaudachuang.catlife.model.RequestMessage;
 import com.scaudachuang.catlife.model.SimpleHaveCatInfoBar;
 import com.scaudachuang.catlife.service.CatOwnerService;
 import com.scaudachuang.catlife.service.HaveCatService;
-import com.scaudachuang.catlife.session.UserSession;
+import com.scaudachuang.catlife.model.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ import java.util.Map;
  * - 有哪些猫
  * - 猫日记
  */
-@Controller
+@RestController
 @RequestMapping("/self/catLife")
 public class CatOwnerSelfInfoController {
     @Resource
@@ -67,11 +67,14 @@ public class CatOwnerSelfInfoController {
     @PostMapping(value = "/correlationList")
     public RequestMessage<Object> insertMyCorrelationList(@RequestParam("nId") long nId,
                                                           @RequestParam("bf") int bf,
+                                                          @RequestParam(value = "beNid", required = false) long beNid,
                                                           HttpServletRequest request) throws Exception {
         UserSession sessionValue = HttpSessionHelper.getUserSessionValue(request);
-        long beNid = sessionValue.getDefineOnlineStatus();
-        if (beNid <= 0)
+        long beNid_redis = sessionValue.getDefineOnlineStatus();
+        if (beNid <= 0 && beNid_redis <= 0)
             return RequestMessage.ERROR(404, "用户错误", null);
+        if (beNid_redis > 0)
+            beNid = beNid_redis;
         boolean b = catOwnerService.newCorrelation(nId, beNid, bf == 1);
         return RequestMessage.INSERT_BOOL(b, "插入结果");
     }

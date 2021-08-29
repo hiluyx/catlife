@@ -1,7 +1,6 @@
 package com.scaudachuang.catlife.dao;
 
 import com.scaudachuang.catlife.model.TopHotDetection;
-import com.scaudachuang.catlife.session.UserSession;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisOperations;
@@ -39,7 +38,8 @@ public class RedisDao implements InitializingBean {
 
     public List<TopHotDetection> getTopHotZSetN(int n) {
         List<TopHotDetection> allTopHotZSet = new ArrayList<>(getAllTopHotZSet());
-        return allTopHotZSet.subList(allTopHotZSet.size() - n, allTopHotZSet.size());
+        int size = allTopHotZSet.size();
+        return allTopHotZSet.subList(size - n >= size ? n : 0, size);
     }
 
     public void addScore(TopHotDetection val, double score) {

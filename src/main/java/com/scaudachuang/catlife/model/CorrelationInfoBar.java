@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Data
 public class CorrelationInfoBar {
     private int id;
-    private Timestamp fbDateTime;
+    private Timestamp bfDatetime;
     private String nickName;
     private String avatar;
 }

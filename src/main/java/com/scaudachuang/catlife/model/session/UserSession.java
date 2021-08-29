@@ -1,6 +1,5 @@
-package com.scaudachuang.catlife.session;
+package com.scaudachuang.catlife.model.session;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

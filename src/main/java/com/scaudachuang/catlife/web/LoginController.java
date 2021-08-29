@@ -7,25 +7,19 @@ import com.scaudachuang.catlife.model.wx.LoginParams;
 import com.scaudachuang.catlife.model.wx.WxSessionResponse;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import com.scaudachuang.catlife.service.CatOwnerService;
-import com.scaudachuang.catlife.session.UserSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.net.ConnectException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author hiluyx
  * @since 2021/7/11 21:12
  **/
-@Controller
+@RestController
 public class LoginController {
 
     @Resource
@@ -39,7 +33,7 @@ public class LoginController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public RequestMessage<CatOwner> wxLogin(@RequestParam(value = "login_params") LoginParams params,
-                                            HttpServletRequest request, HttpServletResponse response) throws ConnectException {
+                                            HttpServletRequest request) throws ConnectException {
         /* 登录参数 */
         final String code = params.getCode();
         final String encryptedData = params.getEncryptedData();

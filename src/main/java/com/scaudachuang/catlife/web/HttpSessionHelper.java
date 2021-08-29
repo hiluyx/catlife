@@ -1,6 +1,6 @@
 package com.scaudachuang.catlife.web;
 
-import com.scaudachuang.catlife.session.UserSession;
+import com.scaudachuang.catlife.model.session.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

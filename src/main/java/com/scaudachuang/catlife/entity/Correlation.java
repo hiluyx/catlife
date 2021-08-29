@@ -1,5 +1,7 @@
 package com.scaudachuang.catlife.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -10,8 +12,11 @@ import java.sql.Timestamp;
  **/
 @Data
 public class Correlation {
-    private long nId;
-    private long beNid;
+    @TableField("nId")
+    private Long nId;
+    @TableId("beNid")
+    private Long beNid;
+    @TableField("bfDatetime")
     private Timestamp bfDatetime;
-    boolean bf;
+    private boolean bf;
 }
