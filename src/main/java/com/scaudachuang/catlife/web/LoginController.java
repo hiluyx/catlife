@@ -7,12 +7,12 @@ import com.scaudachuang.catlife.model.wx.LoginParams;
 import com.scaudachuang.catlife.model.wx.WxSessionResponse;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import com.scaudachuang.catlife.service.CatOwnerService;
-import org.springframework.stereotype.Controller;
+import com.scaudachuang.catlife.utils.HttpSessionHelper;
+import com.scaudachuang.catlife.utils.WxCodedInfoServerHelper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.ConnectException;
 
 /**

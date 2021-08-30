@@ -1,6 +1,8 @@
 package com.scaudachuang.catlife.dao;
 
 import com.scaudachuang.catlife.model.TopHotDetection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisOperations;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  **/
 @Repository
 public class RedisDao implements InitializingBean {
+    private final Logger logger = LoggerFactory.getLogger(RedisDao.class);
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -58,10 +61,13 @@ public class RedisDao implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         Set<String> cats = catMapper.catRepos();
+        logger.info("初始化redis排行耪，mysql：cats " + cats.size());
         Set<TopHotDetection> allTopHotZSet = getAllTopHotZSet();
+        logger.info("初始化redis排行耪，redis：cats " + allTopHotZSet.size());
         cats.removeAll(allTopHotZSet.stream()
                 .map(TopHotDetection::getCatClass)
                 .collect(Collectors.toSet()));
+        logger.info("初始化redis排行耪，差异：cats " + cats);
         cats.forEach(c -> addScore(new TopHotDetection(c), 0));
     }
 }

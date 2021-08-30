@@ -25,7 +25,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 public class RedisSessionConfig extends CachingConfigurerSupport {
     /**
      * retemplate相关配置
-     * @param factory
      * @return
      */
     @Bean

@@ -2,7 +2,7 @@ package com.scaudachuang.catlife.config;
 
 import com.scaudachuang.catlife.dao.RedisDao;
 import com.scaudachuang.catlife.model.session.UserSession;
-import com.scaudachuang.catlife.web.HttpSessionHelper;
+import com.scaudachuang.catlife.utils.HttpSessionHelper;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;

@@ -1,5 +1,6 @@
 package com.scaudachuang.catlife.dao;
 
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.scaudachuang.catlife.entity.Cat;
 import com.scaudachuang.catlife.entity.HaveCat;

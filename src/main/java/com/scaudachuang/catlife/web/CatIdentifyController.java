@@ -3,7 +3,7 @@ package com.scaudachuang.catlife.web;
 import com.scaudachuang.catlife.dao.RedisDao;
 import com.scaudachuang.catlife.model.RequestMessage;
 import com.scaudachuang.catlife.model.TopHotDetection;
-import org.springframework.stereotype.Controller;
+import com.scaudachuang.catlife.utils.LimitProcessing;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +25,7 @@ public class CatIdentifyController {
     private RedisDao redisDao;
 
     @GetMapping("/topIdentity")
+    @LimitProcessing(name = "topHot", ratePerSec = 1)
     public RequestMessage<Map<String, Object>> getTopDetect(@RequestParam(value = "top", required = false) int top) {
         if (top <= 0)
             top = 10;

@@ -7,7 +7,7 @@ import com.scaudachuang.catlife.model.SimpleHaveCatInfoBar;
 import com.scaudachuang.catlife.service.CatOwnerService;
 import com.scaudachuang.catlife.service.HaveCatService;
 import com.scaudachuang.catlife.model.session.UserSession;
-import org.springframework.stereotype.Controller;
+import com.scaudachuang.catlife.utils.HttpSessionHelper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,9 +18,9 @@ import java.util.Map;
 
 /**
  * 用户的私人信息
- * - 粉丝
- * - 黑名单
- * - 有哪些猫
+ * - 粉丝 1
+ * - 黑名单 1
+ * - 有哪些猫 1
  * - 猫日记
  */
 @RestController
@@ -133,4 +133,6 @@ public class CatOwnerSelfInfoController {
         boolean b = haveCatService.newMyCat(cat);
         return RequestMessage.INSERT_BOOL(b, "插入结果");
     }
+
+
 }

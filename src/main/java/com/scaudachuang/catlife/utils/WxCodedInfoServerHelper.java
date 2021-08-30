@@ -1,4 +1,4 @@
-package com.scaudachuang.catlife.web;
+package com.scaudachuang.catlife.utils;
 
 import com.scaudachuang.catlife.config.WxAppDevInfo;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
