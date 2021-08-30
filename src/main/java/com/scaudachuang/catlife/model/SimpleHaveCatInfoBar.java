@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class SimpleHaveCatInfoBar {
     private String catClass;
-    private int haveCatId;
+    private int id;
     private String catName;
 }

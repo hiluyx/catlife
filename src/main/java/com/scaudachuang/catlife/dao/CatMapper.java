@@ -14,11 +14,11 @@ import java.util.Set;
 
 @Repository
 public interface CatMapper extends BaseMapper<HaveCat> {
-    Cat getCat(String cl);
+    Cat getCat(@Param("catClass") String cl);
 
     Set<String> catRepos();
 
-    List<SimpleHaveCatInfoBar> getAllOwnerSimpleHaveCatByIdAndCatClass(
+    List<SimpleHaveCatInfoBar> getAllOwnerSimpleHaveCat(
             @Param("ownerId") long ownerId,
             @Param("catClass") String catClass,
             RowBounds rowBounds
@@ -27,10 +27,7 @@ public interface CatMapper extends BaseMapper<HaveCat> {
     HaveCat getOneHaveCat(
             @Param("ownerId") long ownerId,
             @Param("catClass") String catClass,
-            @Param("haveCatId") int haveCatId
+            @Param("id") int id
     );
-
-    int getNewNumberOfMyHaveCat(@Param("ownerId") long ownerId,
-                                @Param("catClass") String catClass);
 
 }

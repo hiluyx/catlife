@@ -7,6 +7,7 @@ import com.scaudachuang.catlife.entity.Correlation;
 import com.scaudachuang.catlife.model.CorrelationInfoBar;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import org.apache.ibatis.session.RowBounds;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,13 +54,12 @@ public class CatOwnerService {
         /*
         * 严谨来说，nId需要检测是否存在
         * */
-        Timestamp timestamp = new Timestamp(new Date().getTime());
-
+        DateTime dateTime = new DateTime();
         Correlation correlation = new Correlation();
         correlation.setBf(bf);
         correlation.setBeNid(beNid);
         correlation.setNId(nId);
-        correlation.setBfDatetime(timestamp);
+        correlation.setBfDatetime(dateTime);
 
         /* 已存在 */
         Correlation dd = correlationMapper.checkIfPresent(nId, beNid);

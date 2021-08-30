@@ -21,7 +21,7 @@ public class HaveCatService {
 
     public List<SimpleHaveCatInfoBar> myAllCats_simple(long ownerId, String catClass, int page, int limit) {
         RowBounds rowBounds = new RowBounds(page, limit);
-        List<SimpleHaveCatInfoBar> all = catMapper.getAllOwnerSimpleHaveCatByIdAndCatClass(ownerId, catClass, rowBounds);
+        List<SimpleHaveCatInfoBar> all = catMapper.getAllOwnerSimpleHaveCat(ownerId, catClass, rowBounds);
         return all;
     }
 
@@ -31,8 +31,6 @@ public class HaveCatService {
 
     @Transactional
     public boolean newMyCat(HaveCat cat) {
-        int number = catMapper.getNewNumberOfMyHaveCat(cat.getOwnerId(), cat.getCatClass());
-        cat.setHaveCatId(number);
         int insert = catMapper.insert(cat);
         return insert > 0;
     }
