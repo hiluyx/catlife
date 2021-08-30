@@ -10,5 +10,8 @@
     <select id="getByOpenId" resultType="com.scaudachuang.catlife.entity.CatOwner">
         select * from catowner where openId = #{openId};
     </select>
+    <select id="getSelf" resultType="com.scaudachuang.catlife.entity.CatOwner">
+        select * from catowner where ownerId = #{ownerId};
+    </select>
 
 </mapper>

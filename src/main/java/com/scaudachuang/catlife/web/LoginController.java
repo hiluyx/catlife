@@ -3,11 +3,12 @@ package com.scaudachuang.catlife.web;
 import com.scaudachuang.catlife.dao.RedisDao;
 import com.scaudachuang.catlife.entity.CatOwner;
 import com.scaudachuang.catlife.model.RequestMessage;
+import com.scaudachuang.catlife.model.session.UserSession;
 import com.scaudachuang.catlife.model.wx.LoginParams;
 import com.scaudachuang.catlife.model.wx.WxSessionResponse;
 import com.scaudachuang.catlife.model.wx.WxUserDecryptedInfo;
 import com.scaudachuang.catlife.service.CatOwnerService;
-import com.scaudachuang.catlife.utils.HttpSessionHelper;
+import com.scaudachuang.catlife.utils.HttpHelper;
 import com.scaudachuang.catlife.utils.WxCodedInfoServerHelper;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.net.ConnectException;
  * @since 2021/7/11 21:12
  **/
 @RestController
+@RequestMapping("/self")
 public class LoginController {
 
     @Resource
@@ -31,8 +33,16 @@ public class LoginController {
     @Resource
     private RedisDao redisDao;
 
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public RequestMessage<CatOwner> wxLogin(@RequestParam(value = "login_params") LoginParams params,
+    @GetMapping("/myselfInfo")
+    public RequestMessage<CatOwner> myself(HttpServletRequest request) throws Exception {
+        UserSession userSessionValue = HttpHelper.getUserSessionValue(request);
+        if (userSessionValue.getDefineOnlineStatus() <= 0)
+            return RequestMessage.ERROR(404, "尚未登录", null);
+        return RequestMessage.OK(catOwnerService.getMyselfInfo(userSessionValue.getDefineOnlineStatus()));
+    }
+
+    @PostMapping(path = "/login")
+    public RequestMessage<CatOwner> wxLogin(@RequestBody LoginParams params,
                                             HttpServletRequest request) throws ConnectException {
         /* 登录参数 */
         final String code = params.getCode();
@@ -56,7 +66,7 @@ public class LoginController {
             if (catOwner == null)
                 return RequestMessage.ERROR(500, "login fail", null);
 
-            HttpSessionHelper.setUserSessionId(request, catOwner.getOwnerId());
+            HttpHelper.setUserSessionId(request, catOwner.getOwnerId());
             return RequestMessage.OK(catOwner);
         } catch (Exception e) {
             return RequestMessage.ERROR(500, "decrypt uer info fail", null);

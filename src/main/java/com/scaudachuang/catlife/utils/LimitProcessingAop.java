@@ -18,6 +18,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.concurrent.*;
 
 /**
@@ -77,15 +78,7 @@ public class LimitProcessingAop {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletResponse response = ((ServletRequestAttributes) requestAttributes).getResponse();
         if (response != null) {
-            try {
-                response.setStatus(503);
-                ServletOutputStream outputStream = response.getOutputStream();
-                RequestMessage<Object> error = RequestMessage.ERROR(503, annotation.msg(), null);
-                outputStream.print(JSONUtil.writeValue(error));
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            HttpHelper.errMsgResponse(response, 503, annotation.msg(), null);
         } else {
             throw new Throwable(annotation.msg());
         }

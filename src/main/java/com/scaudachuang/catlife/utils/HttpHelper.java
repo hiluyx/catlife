@@ -1,20 +1,24 @@
 package com.scaudachuang.catlife.utils;
 
+import com.scaudachuang.catlife.model.RequestMessage;
 import com.scaudachuang.catlife.model.session.UserSession;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author hiluyx
  * @since 2021/8/22 17:29
  **/
-public class HttpSessionHelper {
+public class HttpHelper {
     public static final String USER_SESSION_ATTR_STRING = "usr_session";
 
     public static UserSession getUserSessionValue(HttpServletRequest request) throws Exception{
-        return HttpSessionHelper.getSessionVal(UserSession.class, request, USER_SESSION_ATTR_STRING);
+        return HttpHelper.getSessionVal(UserSession.class, request, USER_SESSION_ATTR_STRING);
     }
 
     public static <M> M getSessionVal(Class<M> mClass,
@@ -35,5 +39,16 @@ public class HttpSessionHelper {
     public static void setUserSessionId(HttpServletRequest request, long defineOnlineStatus) throws Exception {
         UserSession userSessionValue = getUserSessionValue(request);
         userSessionValue.setDefineOnlineStatus(defineOnlineStatus);
+    }
+
+    public static <T> void errMsgResponse(HttpServletResponse response, int status, String msg, T data) {
+        try {
+            response.setStatus(status);
+            response.setHeader("Content-Type", "application/json;charset=utf-8");
+            PrintWriter writer = response.getWriter();
+            writer.println(JSONUtil.writeValue(RequestMessage.ERROR(status, msg, data)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

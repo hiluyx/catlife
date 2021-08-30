@@ -43,6 +43,10 @@ public class CatOwnerService {
         return catOwnerMapper.getByOpenId(openId);
     }
 
+    public CatOwner getMyselfInfo(long ownerId) {
+        return catOwnerMapper.getSelf(ownerId);
+    }
+
     public List<CorrelationInfoBar> getCorrelationList(int page, int limit, boolean bf, long ownerId) {
         RowBounds rowBounds = new RowBounds(page, limit);
         List<CorrelationInfoBar> userCorrelationInfoBar = correlationMapper.getUserCorrelationInfoBar(ownerId, bf, rowBounds);

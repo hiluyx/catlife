@@ -7,7 +7,7 @@ import com.scaudachuang.catlife.model.SimpleHaveCatInfoBar;
 import com.scaudachuang.catlife.service.CatOwnerService;
 import com.scaudachuang.catlife.service.HaveCatService;
 import com.scaudachuang.catlife.model.session.UserSession;
-import com.scaudachuang.catlife.utils.HttpSessionHelper;
+import com.scaudachuang.catlife.utils.HttpHelper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -48,7 +48,7 @@ public class CatOwnerSelfInfoController {
         * ownerId 不提供说明是自己，在缓存中获取
         * */
         if (ownerId == 0) {
-            ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
+            ownerId = HttpHelper.getUserSessionValue(request).getDefineOnlineStatus();
         } else if (ownerId < 0) {
             return RequestMessage.ERROR(303, "error ownerId", null);
         }
@@ -69,7 +69,7 @@ public class CatOwnerSelfInfoController {
                                                           @RequestParam("bf") int bf,
                                                           @RequestParam(value = "beNid", required = false) long beNid,
                                                           HttpServletRequest request) throws Exception {
-        UserSession sessionValue = HttpSessionHelper.getUserSessionValue(request);
+        UserSession sessionValue = HttpHelper.getUserSessionValue(request);
         long beNid_redis = sessionValue.getDefineOnlineStatus();
         if (beNid <= 0 && beNid_redis <= 0)
             return RequestMessage.ERROR(404, "用户错误", null);
@@ -92,7 +92,7 @@ public class CatOwnerSelfInfoController {
             HttpServletRequest request
         ) throws Exception {
         if (ownerId == 0) {
-            ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
+            ownerId = HttpHelper.getUserSessionValue(request).getDefineOnlineStatus();
         } else if (ownerId < 0) {
             return RequestMessage.ERROR(303, "error ownerId", null);
         }
@@ -113,7 +113,7 @@ public class CatOwnerSelfInfoController {
     public RequestMessage<HaveCat> getMyHaveCat(@RequestParam("catClass") String catClass,
                                                 @RequestParam("haveCatId") int haveCatId,
                                                 HttpServletRequest request) throws Exception {
-        long ownerId = HttpSessionHelper.getUserSessionValue(request).getDefineOnlineStatus();
+        long ownerId = HttpHelper.getUserSessionValue(request).getDefineOnlineStatus();
         if (ownerId <= 0) return RequestMessage.ERROR(500, "错误用户缓存", null);
 
         HaveCat haveCat = haveCatService.myOneHaveCat(ownerId, catClass, haveCatId);
@@ -133,5 +133,5 @@ public class CatOwnerSelfInfoController {
         boolean b = haveCatService.newMyCat(cat);
         return RequestMessage.INSERT_BOOL(b, "插入结果");
     }
-    
+
 }
