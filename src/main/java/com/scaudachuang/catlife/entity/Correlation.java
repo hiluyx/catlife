@@ -3,8 +3,7 @@ package com.scaudachuang.catlife.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-
-import java.sql.Timestamp;
+import org.joda.time.DateTime;
 
 /**
  * @author hiluyx
@@ -17,6 +16,6 @@ public class Correlation {
     @TableId("beNid")
     private Long beNid;
     @TableField("bfDatetime")
-    private Timestamp bfDatetime;
+    private DateTime bfDatetime;
     private boolean bf;
 }

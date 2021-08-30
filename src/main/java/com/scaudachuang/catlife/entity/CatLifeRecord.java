@@ -1,8 +1,8 @@
 package com.scaudachuang.catlife.entity;
 
 import lombok.Data;
+import org.joda.time.DateTime;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class CatLifeRecord {
     private int ownerId;
     private String catClass;
     private int haveCatId;
-    private Timestamp reDateTime;
+    private DateTime reDateTime;
 
     private String growth;
     private String diet;

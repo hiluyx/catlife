@@ -133,6 +133,5 @@ public class CatOwnerSelfInfoController {
         boolean b = haveCatService.newMyCat(cat);
         return RequestMessage.INSERT_BOOL(b, "插入结果");
     }
-
-
+    
 }

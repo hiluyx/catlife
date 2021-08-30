@@ -1,12 +1,13 @@
 package com.scaudachuang.catlife.entity;
 
 import lombok.Data;
+import org.joda.time.DateTime;
 
 import java.sql.Timestamp;
 
 @Data
 public class Memorandum {
     private int ownerId;
-    private Timestamp reDatetime;
+    private DateTime reDatetime;
    private String taskJSON;
 }
